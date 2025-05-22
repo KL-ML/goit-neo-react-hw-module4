@@ -1,0 +1,23 @@
+.header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .header {
+    background-color: var(--dark-secondary-color);
+  }
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+.navLogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.headerTitle {
+  text-align: right;
+}
