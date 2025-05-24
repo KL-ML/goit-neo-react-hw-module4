@@ -6,72 +6,76 @@ import Footer from './Footer/Footer';
 import Backdrop from './Backdrop/Backdrop';
 import Sidebar from './Sidebar/Sidebar';
 import menuItems from '../data/sidebarMenu.json';
-
-import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
-
+import { useEffect, useState } from 'react';
 import Description from './Description/Description';
-import ContactList from './ContactList/ContactList';
-import contacts from '../data/contacts.json';
-
-import SearchBox from './SearchBox/SearchBox';
-import ContactForm from './ContactForm/ContactForm';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { nanoid } from 'nanoid';
-import Container from './Container/Container';
+import { fetchPhotosWithQuery } from '../api/unsplash-photos-api';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Loader from './Loader/Loader';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
+import ImageModal from './ImageModal/ImageModal';
+import Button from './Button/Button';
 
 const homeWork = {
-  number: '3',
-  title: 'Forms.',
+  number: '4',
+  title: 'API. Hooks.',
 };
-
-const defaultContactsState = contacts;
 
 const App = () => {
   const [mobileMenuStatus, setMobileMenuStatus] = useState(false);
-  const [contactsState, setContactsState] = useLocalStorage(
-    'contacts',
-    defaultContactsState
-  );
-  const [filter, setFilter] = useState('');
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [modal, setModalOpen] = useState(false);
+  const [selectedPhoto, setselectedPhoto] = useState(null);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (!searchQuery) return;
+    const fetching = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+        const data = await fetchPhotosWithQuery(searchQuery, page);
+        console.log(data.results);
+        setPhotos(prev =>
+          page === 1 ? data.results : [...prev, ...data.results]
+        );
+        setTotal(data.total_pages);
+      } catch (error) {
+        setError(true);
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetching();
+  }, [searchQuery, page]);
+
+  const handleSearch = query => {
+    setSearchQuery(query);
+    setPage(1);
+  };
+
+  const handleLoadMoreClick = () => {
+    setPage(page + 1);
+  };
+
+  const openModal = photo => {
+    setselectedPhoto(photo);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setselectedPhoto(null);
+  };
 
   //open-close mobile menu sidebar
   function updateMobileMenuStatus(mobileMenuStatus) {
     setMobileMenuStatus((mobileMenuStatus = !mobileMenuStatus));
-  }
-
-  //filter contacts list for search
-  const filtersdContacts = contactsState.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-
-  //get and set values from SearchBox
-  function handleInput(value) {
-    setFilter(value);
-  }
-
-  //add new contact to contacts list
-  function handleAddNewContact(data) {
-    if (findContact(data.name)) {
-      toast.error('Contact with the same name already exists.');
-      return;
-    }
-    setContactsState([
-      ...contactsState,
-      { id: nanoid(), name: data.name, number: data.number },
-    ]);
-  }
-
-  //delete contact from comtact list
-  function handleDeleteContact(id) {
-    setContactsState(contactsState.filter(contact => contact.id != id));
-  }
-
-  //find contact in contact list by name
-  function findContact(name) {
-    return contactsState.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
   }
 
   return (
@@ -81,34 +85,43 @@ const App = () => {
         moduleNumber={homeWork.number}
         moduleTitle={homeWork.title}
         onUpdate={updateMobileMenuStatus}
+        onSearch={handleSearch}
+        isDisabled={loading}
       />
       <Main>
         <Description
-          title="Phonebook"
+          title="Photo Gallery"
           description="Please add your contacts in the phonebook by filling the form below."
         />
-        <ContactForm addContact={handleAddNewContact} />
-
-        {contactsState.length === 0 ? (
-          <p>There are no any contacts yet.</p>
-        ) : (
-          <Container variant="outerContainer">
-            <SearchBox onInput={handleInput} inputValue={filter} />
-            {filtersdContacts.length === 0 && contactsState.length !== 0 ? (
-              <p>There are no contacts with your search.</p>
-            ) : (
-              <ContactList
-                contacts={filtersdContacts}
-                onDelete={handleDeleteContact}
-              />
-            )}
-          </Container>
-        )}
-        <Toaster
-          toastOptions={{
-            removeDelay: 500,
-          }}
-        />
+        <div>
+          {error && <ErrorMessage />}
+          {/* {searchQuery && !loading && photos.length > 0 ? ( */}
+          {photos.lenght === 0 && !loading ? (
+            <p>Enter your search query</p>
+          ) : (
+            <ImageGallery
+              items={photos}
+              // handleLoadMoreClick={handleLoadMoreClick}
+              openModal={openModal}
+              // total={total}
+              // page={page}
+            />
+          )}
+          {total > page && (
+            <Button
+              text="Load more ..."
+              variant="filled"
+              btnType="button"
+              handleLoadMoreClick={handleLoadMoreClick}
+            />
+          )}
+          {loading && <Loader loading={loading} />}
+          <ImageModal
+            modalOpen={modal}
+            closeModal={closeModal}
+            selectedPhoto={selectedPhoto}
+          />
+        </div>
       </Main>
       <Footer />
       <Backdrop mobileMenu={mobileMenuStatus}>
