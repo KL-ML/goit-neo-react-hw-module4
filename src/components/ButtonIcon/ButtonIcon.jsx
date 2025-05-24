@@ -14,6 +14,7 @@ export default function ButtonIcon({
   red,
   onDelete,
   id,
+  isDisabled,
 }) {
   function handleClick(id) {
     onDelete && onDelete(id);
@@ -28,6 +29,7 @@ export default function ButtonIcon({
           green && css.green,
           red && css.red
         )}
+        disabled={isDisabled}
         type={type}
         onClick={() => handleClick(id)}
       >
