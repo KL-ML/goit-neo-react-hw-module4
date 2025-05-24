@@ -9,15 +9,8 @@
     background-color: var(--dark-secondary-color);
   }
 }
-.nav {
+.searchGroup {
   display: flex;
-  justify-content: space-between;
-}
-.navLogo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.headerTitle {
-  text-align: right;
+  justify-content: flex-start;
+  gap: 36px;
 }
