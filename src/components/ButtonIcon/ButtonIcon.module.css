@@ -35,3 +35,10 @@
   opacity: 70%;
   cursor: pointer;
 }
+.search {
+  color: var(--light-tertiary-color);
+}
+.search:hover {
+  color: var(--accent-primary-color);
+  cursor: pointer;
+}
