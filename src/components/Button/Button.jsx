@@ -10,15 +10,16 @@ export default function Button({
   green,
   red,
   addContact,
-  // eslint-disable-next-line no-unused-vars
   icon: Icon,
   iconSize,
   btnType,
+  handleLoadMoreClick
 }) {
   return (
     <>
       <button
         type={btnType}
+        onClick={handleLoadMoreClick}
         className={clsx(
           css.button,
           css[variant],
@@ -28,7 +29,7 @@ export default function Button({
           addContact && css.addContact
         )}
       >
-        <Icon size={iconSize} />
+        {Icon && <Icon size={iconSize} />}
         {text}
       </button>
     </>
