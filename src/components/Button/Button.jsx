@@ -6,30 +6,17 @@ import css from './Button.module.css';
 export default function Button({
   text,
   variant,
-  tabletDisplay,
-  green,
-  red,
-  addContact,
-  icon: Icon,
-  iconSize,
+  positionVariant,
   btnType,
-  handleLoadMoreClick
+  handleLoadMoreClick,
 }) {
   return (
     <>
       <button
         type={btnType}
         onClick={handleLoadMoreClick}
-        className={clsx(
-          css.button,
-          css[variant],
-          tabletDisplay && css.tabletDisplay,
-          green && css.green,
-          red && css.red,
-          addContact && css.addContact
-        )}
+        className={clsx(css.button, css[variant], css[positionVariant])}
       >
-        {Icon && <Icon size={iconSize} />}
         {text}
       </button>
     </>
@@ -38,6 +25,8 @@ export default function Button({
 
 Button.PropTypes = {
   text: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
+  btnType: PropTypes.string,
+  handleLoadMoreClick: PropTypes.func.isRequired,
   variant: PropTypes.string,
+  positionVariant: PropTypes.string,
 };
