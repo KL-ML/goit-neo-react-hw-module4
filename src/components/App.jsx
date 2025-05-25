@@ -41,7 +41,6 @@ const App = () => {
         setLoading(true);
         setError(false);
         const data = await fetchPhotosWithQuery(searchQuery, page);
-        console.log(data.results);
         setPhotos(prev =>
           page === 1 ? data.results : [...prev, ...data.results]
         );
@@ -87,7 +86,7 @@ const App = () => {
     } else if (!searchQuery) {
       return <Description description="Please enter a seach query" />;
     } else if (searchQuery && photos.length > 0) {
-      return <Description title="Photo Gallery" />;
+      return;
     } else if (photos.length === 0 && !loading) {
       return (
         <Description description="There are no photos with your search query" />
