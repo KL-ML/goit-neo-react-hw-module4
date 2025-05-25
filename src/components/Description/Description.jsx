@@ -6,8 +6,8 @@ import css from './Description.module.css';
 export default function Description({ title, description }) {
   return (
     <div>
-      <Heading variant="header1">{title}</Heading>
-      <p className={css.description}>{description}</p>
+      {title && <Heading variant="header1">{title}</Heading>}
+      {description && <p className={css.description}>{description}</p>}
     </div>
   );
 }
