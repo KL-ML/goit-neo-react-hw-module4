@@ -4,6 +4,7 @@ import { IoSearchOutline } from 'react-icons/io5';
 import css from './SearchBar.module.css';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useId } from 'react';
+import PropTypes from 'prop-types';
 
 export default function SearchBar({ onSearch, isDisabled }) {
   const nameFieldId = useId();
@@ -47,3 +48,8 @@ export default function SearchBar({ onSearch, isDisabled }) {
     </>
   );
 }
+
+SearchBar.PropTypes = {
+  onSearch: PropTypes.func,
+  isDisabled: PropTypes.bool,
+};
