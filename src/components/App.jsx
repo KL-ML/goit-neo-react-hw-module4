@@ -86,7 +86,7 @@ const App = () => {
     } else if (!searchQuery) {
       return <Description description="Please enter a seach query" />;
     } else if (searchQuery && photos.length > 0) {
-      return;
+      return <Description title="Photo Gallery" />;
     } else if (photos.length === 0 && !loading) {
       return (
         <Description description="There are no photos with your search query" />
