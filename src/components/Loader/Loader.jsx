@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
+import css from './Loader.module.css';
 import { ClipLoader } from 'react-spinners';
 
 export default function Loader({ loading }) {
   return (
     <>
-      <div>
+      <div className={css.loader}>
         <ClipLoader
           color="orange"
           loading={loading}
@@ -15,3 +17,7 @@ export default function Loader({ loading }) {
     </>
   );
 }
+
+Loader.PropTypes = {
+  loading: PropTypes.bool,
+};
