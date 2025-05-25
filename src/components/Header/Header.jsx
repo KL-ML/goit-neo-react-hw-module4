@@ -32,4 +32,8 @@ export default function Header({
 Header.PropTypes = {
   logoImgPath: PropTypes.string.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onSearch: PropTypes.func,
+  isDisabled: PropTypes.bool,
+  moduleNumber: PropTypes.string,
+  moduleTitle: PropTypes.string,
 };
