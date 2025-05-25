@@ -6,14 +6,17 @@ import Footer from './Footer/Footer';
 import Backdrop from './Backdrop/Backdrop';
 import Sidebar from './Sidebar/Sidebar';
 import menuItems from '../data/sidebarMenu.json';
+
 import { useEffect, useState } from 'react';
-import Description from './Description/Description';
 import { fetchPhotosWithQuery } from '../api/unsplash-photos-api';
+
+import Description from './Description/Description';
+
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import ImageModal from './ImageModal/ImageModal';
-import Button from './Button/Button';
+import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 
 const homeWork = {
   number: '4',
@@ -78,6 +81,20 @@ const App = () => {
     setMobileMenuStatus((mobileMenuStatus = !mobileMenuStatus));
   }
 
+  function renderDescription() {
+    if (error) {
+      return <ErrorMessage />;
+    } else if (!searchQuery) {
+      return <Description description="Please enter a seach query" />;
+    } else if (searchQuery && photos.length > 0) {
+      return <Description title="Photo Gallery" />;
+    } else if (photos.length === 0 && !loading) {
+      return (
+        <Description description="There are no photos with your search query" />
+      );
+    }
+  }
+
   return (
     <Section>
       <Header
@@ -89,33 +106,22 @@ const App = () => {
         isDisabled={loading}
       />
       <Main>
-        <Description
-          title="Photo Gallery"
-          description="Please add your contacts in the phonebook by filling the form below."
-        />
+        {renderDescription()}
         <div>
-          {error && <ErrorMessage />}
-          {/* {searchQuery && !loading && photos.length > 0 ? ( */}
-          {photos.lenght === 0 && !loading ? (
-            <p>Enter your search query</p>
-          ) : (
-            <ImageGallery
-              items={photos}
-              // handleLoadMoreClick={handleLoadMoreClick}
-              openModal={openModal}
-              // total={total}
-              // page={page}
-            />
+          {photos.length > 0 && !error && (
+            <ImageGallery items={photos} openModal={openModal} />
           )}
-          {total > page && (
-            <Button
+          {loading && <Loader loading={loading} />}
+          {total > page && !loading && !error && photos.length > 0 && (
+            <LoadMoreBtn
               text="Load more ..."
               variant="filled"
               btnType="button"
               handleLoadMoreClick={handleLoadMoreClick}
+              positionVariant="loadMoreBtn"
             />
           )}
-          {loading && <Loader loading={loading} />}
+
           <ImageModal
             modalOpen={modal}
             closeModal={closeModal}
