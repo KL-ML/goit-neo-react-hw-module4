@@ -1,22 +1,23 @@
-export default function ImageCard({
-  photo,
-  openModal,
-}) {
+import PropTypes from 'prop-types';
+
+import css from './ImageCard.module.css';
+export default function ImageCard({ photo, openModal }) {
   return (
     <>
-      <div
-        onClick={() => openModal(photo)}
-      >
+      <div className={css.imgWrap} onClick={() => openModal(photo)}>
         <img
+          className={css.img}
           src={photo.urls.small}
           alt={photo.alt_description}
-          width="360"
+          width="340"
           height="200"
         />
-        <p>{photo.description}</p>
-        <p>{photo.created_at}</p>
-        <p>{photo.likes}</p>
       </div>
     </>
   );
 }
+
+ImageCard.PropTypes = {
+  photo: PropTypes.object,
+  openModal: PropTypes.func,
+};
