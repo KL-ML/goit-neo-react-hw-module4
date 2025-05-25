@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import css from './ImageModal.module.css';
+import PropTypes from 'prop-types';
 
 Modal.setAppElement('#root');
 
@@ -24,17 +25,11 @@ export default function ImageModal({ modalOpen, closeModal, selectedPhoto }) {
           />
           <div className={css.info}>
             <p>
-              <strong>Description:</strong> {selectedPhoto.alt_description}
+              <span>Description: </span> {selectedPhoto.alt_description}
             </p>
             <p>
-              <strong>Author:</strong>
-              <a
-                href={selectedPhoto.user.links.self}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {selectedPhoto.user.username}
-              </a>
+              <span>Author: </span>
+              {selectedPhoto.user.username}
             </p>
           </div>
         </div>
@@ -42,3 +37,9 @@ export default function ImageModal({ modalOpen, closeModal, selectedPhoto }) {
     </Modal>
   );
 }
+
+ImageModal.PropTypes = {
+  modalOpen: PropTypes.func,
+  closeModal: PropTypes.func,
+  selectedPhoto: PropTypes.object,
+};
