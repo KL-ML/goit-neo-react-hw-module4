@@ -13,12 +13,11 @@ export const fetchPhotosWithQuery = async (query, page) => {
         client_id: MY_KEY,
         page,
         query,
-        per_page: 15,
+        per_page: 12,
         orientation: 'landscape',
       },
     }
   );
-  console.log(data);
 
   return data;
 };
